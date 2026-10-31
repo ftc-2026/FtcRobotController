@@ -287,28 +287,18 @@ public class BotrageousTeleOp extends OpMode {
     }
 
     void launch() {
-        /*
-         * Calling gamepad1.right_bumper returns a boolean which will be true if the bumper is
-         * held down, and false if it is not. Notably, this will continue to be true for every
-         * cycle of our code that the driver holds down that bumper.
-         * The first step of our launch() function is checking to see if the user is currently
-         * holding down the right gamepad. If they are, then we want to start spinning up the launcher.
-         * Otherwise, we start spinning the launcher down.
-         */
-        if (gamepad1.right_bumper) {
+        // Shooting = holding R2 or L2
+        boolean shooting = gamepad1.right_trigger > 0.5 || gamepad1.left_trigger > 0.5;
+
+        // Spin the flywheel up while shooting, otherwise spin it down
+        if (shooting) {
             launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         } else {
             launcher.setVelocity(0);
         }
 
-        /*
-         * Here we ask if the driver is currently pressing the right bumper, AND the launcher is
-         * spinning fast enough to make a successful shot. If it is, then we will turn on the
-         * windmill servo to start feeding the elements into the launcher motor. We also
-         * add some power to the intake power. This can sometimes help dislodge stuck elements from
-         * inside the hopper.
-         */
-        if (gamepad1.right_bumper && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+        // Feed only while shooting AND the flywheel is fast enough
+        if (shooting && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
             windmillServo.setPower(1);
             intakePower += 0.5;
         } else {
