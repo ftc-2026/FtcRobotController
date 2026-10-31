@@ -240,6 +240,12 @@ public class BotrageousTeleOp extends OpMode {
     }
 
     void mecanumDrive(double forward, double strafe, double rotate) {
+        if (gamepad1.left_bumper) {
+            forward *= 0.4;
+            strafe  *= 0.4;
+            rotate  *= 0.4;
+        }
+
         leftFrontPower = forward + strafe + rotate;
         rightFrontPower = forward - strafe - rotate;
         leftBackPower = forward - strafe + rotate;
