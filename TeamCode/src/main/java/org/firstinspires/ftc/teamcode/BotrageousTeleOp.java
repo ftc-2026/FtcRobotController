@@ -301,10 +301,14 @@ public class BotrageousTeleOp extends OpMode {
             launcher.setVelocity(0);
         }
 
+        // While shooting, turn the intake off (Circle still reverses it to unjam)
+        if (shooting && !gamepad1.circle) {
+            intakePower = 0;
+        }
+
         // Feed only while shooting AND the flywheel is fast enough
         if (shooting && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
             windmillServo.setPower(1);
-            intakePower += 0.5;
         } else {
             windmillServo.setPower(0);
         }
