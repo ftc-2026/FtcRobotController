@@ -244,7 +244,11 @@ public class BotrageousTeleOp extends OpMode {
          * Show motor powers on the Driver Station via telemetry.
          */
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftFrontPower, rightFrontPower);
-        telemetry.addData("Triggers", "left (%.2f, right (%.2f)",gamepad1.left_trigger, gamepad1.right_trigger);
+        telemetry.addData("Launcher RPM", "%.0f / %.0f",
+                launcher.getVelocity() * 60 / 28,
+                LAUNCHER_TARGET_VELOCITY * 60.0 / 28);
+        telemetry.addData("Ready to fire", launcher.getVelocity() > LAUNCHER_MIN_VELOCITY);
+        telemetry.addData("Intake", intakeOn ? "ON" : "off");
     }
 
     /*
