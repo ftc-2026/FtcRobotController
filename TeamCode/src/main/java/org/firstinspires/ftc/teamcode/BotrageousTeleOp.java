@@ -89,6 +89,8 @@ public class BotrageousTeleOp extends OpMode {
 
     // Create a variable to set to the intake.
     double intakePower;
+    boolean intakeOn = false;          // is the intake switched on?
+    boolean crossWasPressed = false;   // was Cross held down last loop?
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -209,9 +211,22 @@ public class BotrageousTeleOp extends OpMode {
          * allow us to avoid setting the same motors/servos power more than once per loop. That can
          * create erratic behavior.
          */
-        intakePower = gamepad1.right_trigger - gamepad1.left_trigger;
+        // Cross toggles the intake on/off: only on the moment it's pressed, not while held
+        if (gamepad1.cross && !crossWasPressed) {
+            intakeOn = !intakeOn;
+        }
+        crossWasPressed = gamepad1.cross;
+
+        if (gamepad1.circle) {
+            intakePower = -1;      // hold Circle: reverse to unjam
+        } else if (intakeOn) {
+            intakePower = 1;       // toggled on: intake in
+        } else {
+            intakePower = 0;       // toggled off
+        }
 
         launch();
+        intakePower = Math.max(-1, Math.min(1, intakePower));
 
         /*
          * Here we set our intake motor and servos to their intake power. The order of operations
